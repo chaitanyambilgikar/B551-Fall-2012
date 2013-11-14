@@ -1,0 +1,78 @@
+### Place your written answers in this text file ###
+
+If you worked on this assignment with any other students, please indicate
+their names here:
+Tarun Gulati
+Shailaja Kapoor
+
+
+
+Q1. 
+a) For values of N as 100, 1000 and 10,000 , the following were the values of
+fraction of samples of each flavor:
+N = 100
+Fraction of times lime was picked:  0.33
+Fraction of times lemon was picked:  0.31
+Fraction of times cherry was picked:  0.36
+
+N = 1000
+Fraction of times lime was picked:  0.284
+Fraction of times lemon was picked:  0.329
+Fraction of times cherry was picked:  0.387
+
+N = 10000
+Fraction of times lime was picked:  0.2944
+Fraction of times lemon was picked:  0.3048
+Fraction of times cherry was picked:  0.4008
+
+Observation: As the number of observations increases, the fraction of samples of
+each flavor approach the actual probability of 
+that flavor as given in the Probability Distribution Table
+
+b) The value En is an indication of the variation in the observed value of the
+probability and the actual probability of that flavor.
+The value of En obtained for n = 100, 1000 and 10,000 is as follows:
+[0.6386000000000002, 0.06494800000000002, 0.00545424]
+This shows that the value decreases for higher values of number of samples
+drawn. Hence, the more the number of samples (N), the closer we get to the
+actual probability of drawing that sample. This is similar to the Weak Law of
+Large Numbers.
+
+Q2.
+The two-node Bayesian Network for this question has been implemented.
+Here, we have a causal relationship between the Bin node and the Flavor node.
+We are required to calculate
+P(Bin | Flavor = 'Lime') for every bin b(i).
+Using Bayes Theorem, we can convert this problem to:
+	P(b(i) | Flavor = 'Lime') = [ P(Flavor = 'Lime' | b(i) )*P(b(i)) ] /
+P(Flavor = 'Lime')
+We can calculate P(Flavor = 'Lime') as
+	Sum(over all i) [P(Flavor='Lime' | b(i))]*P(b(i))
+For the given probability distribution table, I calculated that P(Flavor =
+'Lime') = 0.333
+Using the formula stated above, I calculated the values for P(Bin | Flavor =
+'Lime') for every bin b(i) as follows:
+	i	P(Flavor = 'Lime' | b(i))		P(b(i))		P(b(i) |Flavor = 'Lime')
+	1			0.0				0.1			0.0
+	2			1.0				0.1			0.303
+	3			0.0				0.1			0.0
+	4			0.33				0.1			0.1
+	5			0.67				0.1			0.20303
+	6			0.0				0.1			0.0
+	7			0.0				0.1			0.0
+	8			0.67				0.1			0.20303
+	9			0.33				0.1			0.1
+	10			0.33				0.1			0.1
+
+The following is the result of using the enumerate_ask() function on passing the
+variable as 'Bin' and the evidence as 'Flavor' = 'Lime':
+{'b10': 0.09909909909909909, 'b4': 0.09909909909909909, 'b5':
+0.20120120120120116, 'b6': 0.0, 'b7': 0.0, 'b1': 0.0, 'b2': 0.30030030030030025,
+'b3': 0.0, 'b8': 0.20120120120120116, 'b9': 0.09909909909909909}
+
+My values obtained by hand-calculation are correct and are verified by the above output.
+
+Q3.
+
+Q4.
+b) Vote is the parent. All other nodes are the children.

@@ -1,0 +1,12 @@
+for an evaluation function, simplest way is to mimic that of a tictactoe game.
+In that game we just have a counter set to 0. We check all 3-in-a-row positions to see which all are not occupied by the opponents piece. 
+When ever such "free" positions are found, we increment the counter. 
+
+For gobblet we have to modify this definition for the following reasons:
+1. if we have a "L" of the opponent, then all 3-in-a-row configs with that cell must not be counted.
+2. if we have an "S" or "M" of the opponent, it can still be counted as our cell, since we can cover that piece. (this has to check how many pieces we have
+of each type to make sure we can count that config. ie if there are 2 "M"'s in a row of the opponent, but we have only 1 L to cover that, then that row
+cannot be counted.)
+3. Depending upon which piece(s) of the opponent is blocking the 3-in-a-row config, we must assign weights to each feature.
+4. An L of the opponent must get the weight 0 since that row will not help us.
+For each row:

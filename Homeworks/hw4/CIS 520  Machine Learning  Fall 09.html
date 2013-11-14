@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0082)http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+
+<script src="./CIS 520  Machine Learning  Fall 09_files/load.js">
+  </script><script src="./CIS 520  Machine Learning  Fall 09_files/jsMath-easy-load.js"></script>
+
+<title>CIS 520: Machine Learning: Fall 09</title>
+
+
+
+<meta name="skin" content="Maguila">
+<meta name="generator" content="pmwiki-2.2.44">
+
+<link rel="stylesheet" type="text/css" href="./CIS 520  Machine Learning  Fall 09_files/maguila.css">
+<script type="text/javascript" src="./CIS 520  Machine Learning  Fall 09_files/jquery.js"></script>
+<!--[if lt IE 5.5000]>
+<link rel="stylesheet" type="text/css" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/ie50.css" />
+<![endif]-->
+
+<!--[if IE 5.5000]>
+<link rel="stylesheet" type="text/css" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/ie55.css" />
+<![endif]-->
+
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/ie60.css" />
+<![endif]-->
+
+<!--[if gt IE 6]>
+<link rel="stylesheet" type="text/css" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/ie70.css" />
+<![endif]-->
+
+<!--HTMLHeader--><style type="text/css"><!--
+  ul, ol, pre, dl, p { margin-top:0px; margin-bottom:0px; }
+  code.escaped { white-space: nowrap; }
+  .vspace { margin-top:1.33em; }
+  .indent { margin-left:40px; }
+  .outdent { margin-left:40px; text-indent:-40px; }
+  a.createlinktext { text-decoration:none; border-bottom:1px dotted gray; }
+  a.createlink { text-decoration:none; position:relative; top:-0.5em;
+    font-weight:bold; font-size:smaller; border-bottom:none; }
+  img { border:0px; }
+  
+span.anchor {
+	float: left;
+	font-size: 10px;
+	margin-left: -10px;
+	width: 10px;
+    position:relative; top:-0.1em;
+	text-align: center;
+}
+span.anchor a { text-decoration: none; }
+span.anchor a:hover { text-decoration: underline; }
+ol.toc { text-indent:-20px; list-style: none; }
+ol.toc ol.toc { text-indent:-40px; }
+div.tocfloat { font-size: smaller; margin-bottom: 10px;
+    border-top: 1px dotted #555555; border-bottom: 1px dotted #555555;
+    padding-top: 5px; padding-bottom: 5px; 
+    width: 38%; float: right; margin-left: 10px; clear: right;
+    margin-right:-13px; padding-right: 13px; padding-left: 13px;
+    background-color: #eeeeee; }
+div.toc { font-size: smaller; 
+    padding: 5px; border: 1px dotted #cccccc;
+    background: #f7f7f7;
+    margin-bottom: 10px; }
+div.toc p { background-color: #f9f6d6;
+    margin-top:-5px;   padding-top: 5px;
+    margin-left:-5px;  padding-left: 5px;
+    margin-right:-5px; padding-right: 5px;
+    padding-bottom: 3px;
+    border-bottom:  1px dotted #cccccc; }.editconflict { color:green; 
+  font-style:italic; margin-top:1.33em; margin-bottom:1.33em; }
+  div#wiki-action li.browse a{
+	border-bottom:1px solid white}
+  div#wiki-foot li.browse a{
+	border-bottom:2px solid black}
+  table.markup { border:2px dotted #ccf; width:90%; }
+  td.markup1, td.markup2 { padding-left:10px; padding-right:10px; }
+  table.vert td.markup1 { border-bottom:1px solid #ccf; }
+  table.horiz td.markup1 { width:23em; border-right:1px solid #ccf; }
+  table.markup caption { text-align:left; }
+  div.faq p, div.faq pre { margin-left:2em; }
+  div.faq p.question { margin:1em 0 0.75em 0; font-weight:bold; }
+  div.faqtoc div.faq * { display:none; }
+  div.faqtoc div.faq p.question 
+    { display:block; font-weight:normal; margin:0.5em 0 0.5em 20px; line-height:normal; }
+  div.faqtoc div.faq p.question * { display:inline; }
+   
+    .frame 
+      { border:1px solid #cccccc; padding:4px; background-color:#f9f9f9; }
+    .lfloat { float:left; margin-right:0.5em; }
+    .rfloat { float:right; margin-left:0.5em; }
+a.varlink { text-decoration:none; }
+ div#grid-main{
+	padding-right:0;border-right:0;}
+ div#grid-right{
+	width:0;margin-right:0;float:none;border:0}
+ div#grid-wrap{
+	padding-right:0}
+
+--></style><script type="text/javascript" src="./CIS 520  Machine Learning  Fall 09_files/answerbox.js"></script><link rel="stylesheet" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/css/answerbox.css">
+  <script> jsMath = {
+               Controls: {cookie: {scale: 120}},
+               Autoload: {loadFiles: ["extensions/eqn-number.js", 
+                                      "extensions/newcommand.js", 
+                                      "extensions/boldsymbol.js", 
+                                      "extensions/AMSmath.js"]
+                         },
+               EqnNumber: {autonumber: 0} } </script>
+
+  <script src="./CIS 520  Machine Learning  Fall 09_files/autoload.js"></script>
+<script type="text/javascript">
+function toggle(obj) {
+    var elstyle = document.getElementById(obj).style;
+    var text    = document.getElementById(obj + "tog");
+    if (elstyle.display == 'none') {
+        elstyle.display = 'block';
+        text.innerHTML = "hide";
+    } else {
+        elstyle.display = 'none';
+        text.innerHTML = "show";
+    }
+}
+</script>
+  <script> 
+function addEvent( obj, evt, fn ) {
+  if (obj.addEventListener) obj.addEventListener( evt, fn, false );
+  else if (obj.attachEvent) obj.attachEvent( "on"+evt, fn );
+}
+
+function removeEvent( obj, evt, fn ) {
+  if (obj.removeEventListener) obj.removeEventListener( evt, fn, false );
+  else if (obj.detachEvent) obj.detachEvent( "on"+evt, fn );
+}
+
+var ef;
+function verifyExitOnEdit(e) {
+  if (!ef) return;
+  var evt = e || window.event;
+  var msg = "All changes will be lost.";
+  for ( var i in ef.elements ) {
+    if ( ( ef.elements[i].type in { "text":"", "textarea":"" } )
+      && ( ef.elements[i].value != ef.elements[i].defaultValue )
+    ) {
+      if (evt) evt.returnValue = msg;
+      return msg;
+    }
+  }
+}
+
+addEvent( window, "load", function() {
+  var et = document.getElementById("text");
+  if (et) {
+    ef = et.form;
+    addEvent( window, "beforeunload", verifyExitOnEdit );
+    addEvent( ef, "submit", function() {
+      removeEvent( window, "beforeunload", verifyExitOnEdit ); } );
+    }
+} );
+</script>
+  <meta name="robots" content="index,follow">
+
+
+<link rel="shortcut icon" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/favicon.ico">
+<link rel="icon" href="http://learning.cis.upenn.edu/cis520_fall2009/pub/skins/maguila/favicon.ico">
+
+<style type="text/css">#jsMath_test {font-size:200%}
+</style><style type="text/css">.math {font-family: serif; font-style: normal; font-weight: normal}
+.typeset {font-family: serif; font-style: normal; font-weight: normal; line-height: normal; text-indent: 0px}
+.typeset .normal {font-family: serif; font-style: normal; font-weight: normal}
+div.typeset {text-align: center; margin: 1em 0px}
+span.typeset {text-align: left}
+.typeset span {text-align: left; border: 0px; margin: 0px; padding: 0px}
+a .typeset img, .typeset a img {border: 0px; border-bottom: 1px solid blue;}
+.typeset .size0 {font-size: 50%}
+.typeset .size1 {font-size: 60%}
+.typeset .size2 {font-size: 70%}
+.typeset .size3 {font-size: 85%}
+.typeset .size4 {font-size: 100%}
+.typeset .size5 {font-size: 120%}
+.typeset .size6 {font-size: 144%}
+.typeset .size7 {font-size: 173%}
+.typeset .size8 {font-size: 207%}
+.typeset .size9 {font-size: 249%}
+.typeset .cmr10 {font-family: jsMath-cmr10, serif}
+.typeset .cmbx10 {font-family: jsMath-cmbx10, jsMath-cmr10}
+.typeset .cmti10 {font-family: jsMath-cmti10, jsMath-cmr10}
+.typeset .cmmi10 {font-family: jsMath-cmmi10}
+.typeset .cmsy10 {font-family: jsMath-cmsy10}
+.typeset .cmex10 {font-family: jsMath-cmex10}
+.typeset .textit {font-family: serif; font-style: italic}
+.typeset .textbf {font-family: serif; font-weight: bold}
+.typeset .link {text-decoration: none}
+.typeset .error {font-size: 90%; font-style: italic; background-color: #FFFFCC; padding: 1px; border: 1px solid #CC0000}
+.typeset .blank {display: inline-block; overflow: hidden; border: 0px none; width: 0px; height: 0px}
+.typeset .spacer {display: inline-block}
+#jsMath_hiddenSpan {visibility: hidden; position: absolute; top: 0px; left: 0px; line-height: normal; text-indent: 0px}
+#jsMath_message {position: fixed; bottom: 1px; left: 2px; background-color: #E6E6E6; border: solid 1px #959595; margin: 0px; padding: 1px 8px; z-index: 102; color: black; font-size: small; width: auto}
+#jsMath_panel {position: fixed; bottom: 1.75em; right: 1.5em; padding: .8em 1.6em; background-color: #DDDDDD; border: outset 2px; z-index: 103; width: auto; color: black; font-size: 10pt; font-style: normal}
+#jsMath_panel .disabled {color: #888888}
+#jsMath_panel .infoLink {font-size: 85%}
+#jsMath_panel * {font-size: inherit; font-style: inherit; font-family: inherit; line-height: normal}
+#jsMath_panel div {background-color: inherit; color: inherit}
+#jsMath_panel span {background-color: inherit; color: inherit}
+#jsMath_panel td {border: 0px; padding: 0px; margin: 0px; background-color: inherit; color: inherit}
+#jsMath_panel tr {border: 0px; padding: 0px; margin: 0px; background-color: inherit; color: inherit}
+#jsMath_panel table {border: 0px; padding: 0px; margin: 0px; background-color: inherit; color: inherit; height: auto; width: auto}
+#jsMath_button {position: fixed; bottom: 1px; right: 2px; background-color: white; border: solid 1px #959595; margin: 0px; padding: 0px 3px 1px 3px; z-index: 102; color: black; text-decoration: none; font-size: x-small; width: auto; cursor: hand}
+#jsMath_button * {padding: 0px; border: 0px; margin: 0px; line-height: normal; font-size: inherit; font-style: inherit; font-family: inherit}
+#jsMath_global {font-style: italic}
+#jsMath_noFont .message {text-align: center; padding: .8em 1.6em; border: 3px solid #DD0000; background-color: #FFF8F8; color: #AA0000; font-size: small; width: auto}
+#jsMath_noFont .link {padding: 0px 5px 2px 5px; border: 2px outset; background-color: #E8E8E8; color: black; font-size: 80%; width: auto; cursor: hand}
+#jsMath_PrintWarning .message {text-align: center; padding: .8em 1.6em; border: 3px solid #DD0000; background-color: #FFF8F8; color: #AA0000; font-size: x-small; width: auto}
+@media print {#jsMath_button {display: none}
+#jsMath_Warning {display: none}
+}
+@media screen {#jsMath_PrintWarning {display: none}
+}
+.typeset .scale {font-size: 120%}
+</style><style type="text/css">.typeset .cmr10 {font-family: CMR10, serif}
+.typeset .cmbx10 {font-family: CMBX10, CMR10}
+.typeset .cmti10 {font-family: CMTI10, CMR10}
+.typeset .cmmi10 {font-family: CMMI10}
+.typeset .cmsy10 {font-family: CMSY10}
+.typeset .cmex10 {font-family: CMEX10}
+.typeset .arial {font-family: 'Arial unicode MS'}
+</style><style type="text/css">.jsMath_displayBox, .tex2math_div {position: relative}
+.jsMath_number {position: absolute; right: 2em; top: 50%; margin-top: -.5em; height: auto; width: auto}
+.jsMath_ref {text-decoration: none}
+</style></head>
+
+<body><div id="jsMath_message" style="visibility: hidden; " title=""></div><div id="jsMath_button" title=" Open jsMath Control Panel "><span onclick="jsMath.Controls.Panel()">jsMath</span></div><div id="jsMath_panel" style="display: none; "></div><div id="jsMath_Hidden" style="visibility: hidden; position: absolute; top: 0px; left: 0px; border: 0px; padding: 0px; margin: 0px; "></div><div style="position: fixed; bottom: 1px; left: 2px; background-color: rgb(230, 230, 230); border: 1px solid rgb(149, 149, 149); margin: 0px; padding: 1px 8px; z-index: 102; color: black; font-size: 75%; width: auto; visibility: hidden; "></div>
+
+<div id="wiki-wrap">
+
+<!--PageHeadFmt-->
+<div id="wiki-head">
+<h1><a href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?action=home">CIS<span>520:</span>Machine<span>Learning</span></a></h1>
+<h2>Fall 09</h2>
+<!--PageSearchFmt-->
+<form id="wiki-search" action="./CIS 520  Machine Learning  Fall 09_files/CIS 520  Machine Learning  Fall 09.html" method="get">
+   <input type="text" name="q" value="Search" id="search-textbox" size="13" onfocus="preval=this.value; this.value=&#39;&#39;" onblur="this.value=preval">
+   <input type="submit" id="search-button" value="Go">
+   <input type="hidden" name="focus" value="true">
+   <input type="hidden" name="action" value="search">
+   <input type="hidden" name="n" value="Lectures.PointEstimation">
+  <p></p></form>
+
+<!--/PageSearchFmt-->
+</div>
+<!--/PageHeadFmt-->
+
+<!--PageActionFmt-->
+<div id="wiki-action">
+<ul><li class="home noborder"><a accesskey="ak_home" class="urllink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?action=home" rel="nofollow">Home</a>
+</li><li class="login"><a accesskey="ak_login" rel="nofollow" class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation?action=login">Login</a>
+</li><li class="print"><a accesskey="" rel="nofollow" class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Site.ActionBar?action=print">Print</a>
+</li><li class="search"><a accesskey="ak_search" rel="nofollow" class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Site.Search?action=search">Search</a>
+</li></ul><div class="vspace"></div>
+
+</div>
+<!--/PageActionFmt-->
+
+<div id="grid-wrap">
+<div id="grid-inner">
+
+<div id="grid-main">
+<div id="wiki-main">
+<!--PageTitleFmt-->
+
+<!--/PageTitleFmt-->
+<!--PageText-->
+<div id="wikitext">
+<p style="text-align: center;"> <span class="wikitrail">&lt;&lt; <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Intro">Introduction</a> | <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Trail">Lecture List</a> | <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Gaussians">Gaussians</a> &gt;&gt;</span>
+</p><div class="toc"><p><a name="toc" id="toc"></a><b>On this page...</b> (<a id="tocidtog" href="javascript:toggle('tocid');">hide</a>)</p><ul class="toc" id="tocid"><li><a href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation#toc1">Point Estimation Basics: Biased Coin</a><ul class="toc"><li><a href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation#toc2">Maximum Likelihood Estimation (MLE) for the coin</a></li><li><a href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation#toc3">Learning guarantees</a></li><li><a href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PointEstimation#toc4">The Bayesian way</a></li></ul></li></ul></div>
+<div class="vspace"></div><h1><a name="toc1" id="toc1"></a>Point Estimation Basics: Biased Coin</h1>
+<p>Before we get to any complex learning algorithms, let's begin with the most basic learning problem.
+</p>
+<div class="vspace"></div><div><span class="frame lfloat">  <img width="100px" src="./CIS 520  Machine Learning  Fall 09_files/old_coin.jpg" alt="from http://www.usc.edu/dept/LAS/wsrp/educational_site/uscarc/alexander_coin1_obv_e.jpg" title="from http://www.usc.edu/dept/LAS/wsrp/educational_site/uscarc/alexander_coin1_obv_e.jpg"><br>A biased coin.</span></div>
+<p class="vspace"><br clear="all">
+</p>
+<p class="vspace">Suppose you found a funny looking coin on your way to class and, being a scientist, started flipping it.   
+What is the simplest model of this scientific experiment? Each flip is a Bernoulli (binary) variable, identically and independently distributed (<a class="urllink" href="http://en.wikipedia.org/wiki/Independent_and_identically-distributed_random_variables" rel="nofollow">i.i.d.</a>):<br clear="all">
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">Heads</span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">and</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">Tails</span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">1</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span></span><span class="cmmi10">;</span><span style="position: relative; margin-left:0.444em;"><span class="cmr10">where</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">2</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">[</span></span><span class="cmr10">0</span><span class="cmmi10">;</span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">1</span></span><span class="cmr10">]</span><span class="cmmi10">:</span>&nbsp;</span><span class="blank" style="width:23.083em;height:1.236em;"></span></span><span class="blank" style="height:1.1em;vertical-align:-0.3em"></span></span></nobr></div>
+<p>So if you flip the coin N times, with H heads and T tails, the likelihood of observing a sequence (data) D is
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">H</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span class="cmr10">(1</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">T</span></span><span class="spacer" style="margin-left:0.05em"></span></span><span class="cmmi10">:</span>&nbsp;</span><span class="blank" style="width:10.099em;height:1.236em;"></span></span><span class="blank" style="height:1.240em;vertical-align:-0.3em"></span></span></nobr></div>
+<div class="vspace"></div><h2><a name="toc2" id="toc2"></a>Maximum Likelihood Estimation (MLE) for the coin</h2>
+<p class="vspace">You observe 3 heads and 2 tails. What's your guess for <span class="typeset"><nobr><span class="scale"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span></nobr></span>?
+If you guessed 3/5, you might be doing MLE, which is simply finding a model that best explains your experiment:
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">µ</span><span style="position: relative; top:0.236em;"><span class="size2"><span class="cmmi10">ML</span></span><span class="size2"><span class="cmmi10">E</span></span><span class="spacer" style="margin-left:0.040em"></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:-2.136em; top:-0.263em;"><span class="cmr10">^</span></span><span class="spacer" style="margin-left:1.636em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">arg</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">max</span><span style="position: relative; margin-left:-1.167em; top:0.652em;"><span class="size2"><span class="cmmi10">µ</span></span></span><span class="spacer" style="margin-left:0.687em"></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">arg</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">max</span><span style="position: relative; margin-left:-1.167em; top:0.652em;"><span class="size2"><span class="cmmi10">µ</span></span></span><span class="spacer" style="margin-left:0.687em"></span></span><span style="position: relative; margin-left:1em;"><span class="cmr10">log</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span>&nbsp;</span><span class="blank" style="width:21.984em;height:1.236em;"></span></span><span class="blank" style="height:1.809em;vertical-align:-0.802em"></span></span></nobr></div>
+<p class="vspace">Why log?  Because when we take the log, the log of a product becomes a sum of logs: 
+</p><pre> <div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmr10">log</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">log</span></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">T</span><span class="spacer" style="margin-left:0.139em"></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">log</span></span><span class="cmr10">(1</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span class="cmmi10">:</span>&nbsp;</span><span class="blank" style="width:15.963em;height:1.247em;"></span></span><span class="blank" style="height:1.1em;vertical-align:-0.3em"></span></span></nobr></div>
+</pre><p class="vspace">How do we find the <span class="typeset"><nobr><span class="scale"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span></nobr></span> that maximizes the log-likelihood of the data?  Let's try to set the derivative to zero:
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.240em; top:-0.676em;"><span class="cmmi10">d</span></span><span style="position: relative; margin-left:-0.790em; top:0.685em;"><span class="cmmi10">d</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span style="position: relative; margin-left:-1.030em; top:-0.27em;"><span class="blank" style="border-left:1.030em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">log</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">0</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">!</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span style="position: relative; top:0.236em;"><span class="size2"><span class="cmmi10">ML</span></span><span class="size2"><span class="cmmi10">E</span></span><span class="spacer" style="margin-left:0.040em"></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:-2.136em; top:-0.263em;"><span class="cmr10">^</span></span><span class="spacer" style="margin-left:1.636em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.996em; top:-0.676em;"><span class="cmmi10">H</span></span><span style="position: relative; margin-left:-1.820em; top:0.685em;"><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">T</span><span class="spacer" style="margin-left:0.139em"></span></span></span><span style="position: relative; margin-left:-2.816em; top:-0.27em;"><span class="blank" style="border-left:2.816em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span>&nbsp;</span><span class="blank" style="width:16.763em;height:1.236em;"></span></span><span class="blank" style="height:2.239em;vertical-align:-0.819em"></span></span></nobr></div>.
+<p class="vspace">Why and when is this a good idea?  In practice, MLE principle is a basis for a majority of practical parameter estimation algorithms, as we will see. If you have enough data and the correct model, MLE is all you need: it will find the true parameters.  
+</p>
+<p class="vspace">The problem is that you rarely have either enough data or the correct
+model, so MLE can be terribly wrong.  Example: suppose all five tosses come up heads, would you believe MLE?  What about five million tosses, all heads?
+</p>
+<div class="vspace"></div><h2><a name="toc3" id="toc3"></a>Learning guarantees</h2>
+<p class="vspace">How sure can you be in your estimate, supposing you still believe your model?
+The following bound (based on <a class="urllink" href="http://en.wikipedia.org/wiki/Hoeffding%27s_inequality" rel="nofollow">Hoeffding inequality</a>) will be very useful later in the course:
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmsy10">j</span><span class="cmmi10">µ</span><span style="position: relative; top:0.236em;"><span class="size2"><span class="cmmi10">ML</span></span><span class="size2"><span class="cmmi10">E</span></span><span class="spacer" style="margin-left:0.040em"></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:-2.136em; top:-0.263em;"><span class="cmr10">^</span></span><span class="spacer" style="margin-left:1.636em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmsy10">¤</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span class="cmsy10">j</span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">¸</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">²</span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">&#8729;</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">2</span></span><span class="cmmi10">e</span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">2</span><span class="cmmi10">N</span></span><span class="size2"><span class="cmmi10">²</span></span><span style="position: relative; top:-0.254em;"><span class="size0"><span class="cmr10">2</span></span><span class="spacer" style="margin-left:0.035em"></span></span><span class="size2"><span class="cmmi10">;</span></span><span class="spacer" style="margin-left:0.05em"></span></span>&nbsp;</span><span class="blank" style="width:14.152em;height:1.236em;"></span></span><span class="blank" style="height:1.338em;vertical-align:-0.3em"></span></span></nobr></div>
+<p>where <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; top:-0.362em;"><span class="size2"><span class="cmsy10">¤</span></span><span class="spacer" style="margin-left:0.05em"></span></span>&nbsp;</span><span class="blank" style="width:0.961em;height:1.236em;"></span></span><span class="blank" style="height:0.794em;vertical-align:-0.05em"></span></span></nobr></span> is the true parameter and <span class="typeset"><nobr><span class="scale"><span class="cmmi10">²</span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">&gt;</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">0</span></span></span></nobr></span>.
+</p>
+<p class="vspace">In words: The probability of the observed proportion of heads deviating by <span class="typeset"><nobr><span class="scale"><span class="cmmi10">²</span></span></nobr></span> from
+the true proportion in an i.i.d. sample of N tosses decreases exponentially with N and <span class="typeset"><nobr><span class="scale"><span class="cmmi10">²</span></span></nobr></span>. So if I want to be 95% sure that I guessed the proportion plus/minus 0.1. We have 
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmr10">0</span><span class="cmmi10">:</span><span class="cmr10">05</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">2</span></span><span class="cmmi10">e</span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">2</span></span><span class="size2"><span class="cmmi10">N</span></span><span class="spacer" style="margin-left:0.076em"></span><span class="size2"><span class="cmsy10">¤</span><span class="cmr10">0</span><span class="cmmi10">:</span></span><span class="size2"><span class="cmr10">1</span></span><span style="position: relative; top:-0.254em;"><span class="size0"><span class="cmr10">2</span></span><span class="spacer" style="margin-left:0.035em"></span></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">!</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">N</span><span class="spacer" style="margin-left:0.109em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.068em; top:0.685em;"><span class="cmr10">2</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¤</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">0</span></span><span class="cmmi10">:</span><span class="cmr10">1</span><span style="position: relative; top:-0.288em;"><span class="size2"><span class="cmr10">2</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span style="position: relative; margin-left:-3.160em; top:-0.854em;"><span class="cmr10">log</span><span style="position: relative; margin-left:0.166em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.618em; top:-0.393em;"><span class="size2"><span class="cmr10">2</span></span></span><span style="position: relative; margin-left:-1.099em; top:0.344em;"><span class="size2"><span class="cmr10">0</span><span class="cmmi10">:</span><span class="cmr10">05</span></span></span><span style="position: relative; margin-left:-1.717em; top:-0.27em;"><span class="blank" style="border-left:1.717em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span></span><span style="position: relative; margin-left:-3.229em; top:-0.27em;"><span class="blank" style="border-left:3.229em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">¼</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">1</span></span><span class="cmr10">85</span>&nbsp;</span><span class="blank" style="width:18.137em;height:1.236em;"></span></span><span class="blank" style="height:2.485em;vertical-align:-0.735em"></span></span></nobr></div>
+<p>Here and below, log is the natural log.
+In general, if I want <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmr10">1</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">±</span><span class="spacer" style="margin-left:0.037em"></span></span>&nbsp;</span><span class="blank" style="width:2.061em;height:1.236em;"></span></span><span class="blank" style="height:0.877em;vertical-align:-0.133em"></span></span></nobr></span> confidence with <span class="typeset"><nobr><span class="scale"><span class="cmmi10">²</span></span></nobr></span> (absolute) error, I need
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">N</span><span class="spacer" style="margin-left:0.109em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">¸</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.309em; top:0.685em;"><span class="cmr10">2</span><span class="cmmi10">²</span><span style="position: relative; top:-0.288em;"><span class="size2"><span class="cmr10">2</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span style="position: relative; margin-left:-1.683em; top:-0.854em;"><span class="cmr10">log</span><span style="position: relative; margin-left:0.166em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.034em; top:0.344em;"><span class="size2"><span class="cmmi10">±</span></span></span><span style="position: relative; margin-left:-0.446em; top:-0.393em;"><span class="size2"><span class="cmr10">2</span></span></span><span style="position: relative; margin-left:-0.480em; top:-0.27em;"><span class="blank" style="border-left:0.480em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span></span><span style="position: relative; margin-left:-1.992em; top:-0.27em;"><span class="blank" style="border-left:1.992em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span><span class="cmmi10">:</span>&nbsp;</span><span class="blank" style="width:4.603em;height:1.236em;"></span></span><span class="blank" style="height:2.485em;vertical-align:-0.735em"></span></span></nobr></div>
+<p>Here are the required number of independent tosses for a several values of 
+confidence <span class="typeset"><nobr><span class="scale"><span class="cmmi10">±</span><span class="spacer" style="margin-left:0.037em"></span></span></nobr></span>:
+</p><div><span class="frame lfloat"> <img width="300px" src="./CIS 520  Machine Learning  Fall 09_files/coin_bound.png" alt="Plot of bound" title="Plot of bound"><br>A plot of the bound for several values of <span class="typeset"><nobr><span class="scale"><span class="cmmi10">±</span><span class="spacer" style="margin-left:0.037em"></span></span></nobr></span>. </span></div>
+<p class="vspace"><br clear="all">
+</p>
+<p class="vspace">Guarantees of this kind is what  probably approximately correct (PAC) framework aims to derive for learning algorithms, where the key goal is polynomial or better dependence of N (sample complexity) on other factors.
+We'll talk about this <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.PAC">much more later in the course</a>.
+</p>
+<div class="vspace"></div><h2><a name="toc4" id="toc4"></a>The Bayesian way</h2>
+<p class="vspace">The fact is, that you have some experience with coins, so when you don't have enough data, you rely on your prior knowledge that most coins are pretty fair to estimate the parameter.
+If you're a Bayesian, you will embrace uncertainty but quantify it, by assuming that your prior belief about coin fairness can be described with a distribution
+<span class="typeset"><nobr><span class="scale"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span></span></nobr></span>. In particular, the  Beta distribution, with several examples shown below, is a very convenient class of priors:
+</p>
+<div class="vspace"></div><div class="frame" style="margin-left: auto; margin-right: auto; width: 500px; text-align: center;"> <img src="./CIS 520  Machine Learning  Fall 09_files/beta-distributions.png" alt=" from http://www.mailund.dk/wp-content/uploads/2009/08/beta-distributions.png" title=" from http://www.mailund.dk/wp-content/uploads/2009/08/beta-distributions.png"> </div>
+<p class="vspace">We'll talk about the exact form of the prior in a moment, but first, what do we do with it?
+The Bayesian framework  uses data to update its distribution over the parameters.  Using <a class="urllink" href="http://mathworld.wolfram.com/BayesTheorem.html" rel="nofollow">Bayes rule</a>, we obtain a posterior over parameters:
+</p>
+<div class="vspace"></div><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:1.408em; top:0.685em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span></span><span style="position: relative; margin-left:-3.812em; top:-0.76em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span></span><span style="position: relative; margin-left:-5.221em; top:-0.27em;"><span class="blank" style="border-left:5.221em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">/</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span>&nbsp;</span><span class="blank" style="width:16.351em;height:1.236em;"></span></span><span class="blank" style="height:2.545em;vertical-align:-0.985em"></span></span></nobr></div> 
+<p class="vspace">Now let's look at the <a class="urllink" href="http://en.wikipedia.org/wiki/Beta_distribution" rel="nofollow">Beta distribution</a>:
+</p>
+<div class="vspace"></div><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">Beta</span><span class="cmr10">(</span><span class="cmmi10">®;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">:</span></span><span style="position: relative; margin-left:0.833em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">®</span></span><span class="cmmi10">;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:0.137em; top:-0.76em;"><span class="cmr10">¡(</span><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span class="cmr10">)</span></span><span style="position: relative; margin-left:-3.916em; top:0.685em;"><span class="cmr10">¡(</span><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span><span class="cmr10">)¡(</span><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span><span class="cmr10">)</span></span><span style="position: relative; margin-left:-4.053em; top:-0.27em;"><span class="blank" style="border-left:4.053em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">®</span></span><span class="spacer" style="margin-left:0.002em"></span><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">1</span></span><span class="spacer" style="margin-left:0.05em"></span></span><span class="cmr10">(1</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">¯</span></span><span class="spacer" style="margin-left:0.036em"></span><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">1</span></span><span class="spacer" style="margin-left:0.05em"></span></span><span class="cmmi10">;</span>&nbsp;</span><span class="blank" style="width:23.221em;height:1.236em;"></span></span><span class="blank" style="height:2.545em;vertical-align:-0.985em"></span></span></nobr></div>
+<p class="vspace">where <span class="typeset"><nobr><span class="scale"><span class="cmr10">¡</span></span></nobr></span> is the <a class="urllink" href="http://en.wikipedia.org/wiki/Gamma_function" rel="nofollow">gamma function</a> (for positive integers n, <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmr10">¡(</span><span class="cmmi10">n</span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">(</span></span><span class="cmmi10">n</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">1</span></span><span class="cmr10">)!</span>&nbsp;</span><span class="blank" style="width:6.732em;height:1.236em;"></span></span><span class="blank" style="height:1.1em;vertical-align:-0.3em"></span></span></nobr></span>).
+The hyperparameters <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">¸</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">1</span></span><span class="cmmi10">;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">¸</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">1</span></span>&nbsp;</span><span class="blank" style="width:5.152em;height:1.236em;"></span></span><span class="blank" style="height:0.988em;vertical-align:-0.244em"></span></span></nobr></span> control the shape of the prior: their sum controls peakiness and their ratio controls the left-right bias.  Why is Beta so convenient?  Here's why:
+</p>
+<div class="vspace"></div><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">/</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">/</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">H</span></span><span class="spacer" style="margin-left:0.056em"></span><span class="size2"><span class="cmr10">+</span></span><span class="size2"><span class="cmmi10">®</span></span><span class="spacer" style="margin-left:0.002em"></span><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">1</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span class="cmr10">(1</span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; top:-0.412em;"><span class="size2"><span class="cmmi10">T</span></span><span class="spacer" style="margin-left:0.097em"></span><span class="size2"><span class="cmr10">+</span></span><span class="size2"><span class="cmmi10">¯</span></span><span class="spacer" style="margin-left:0.036em"></span><span class="size2"><span class="cmsy10">¡</span><span class="cmr10">1</span></span><span class="spacer" style="margin-left:0.05em"></span></span>&nbsp;</span><span class="blank" style="width:21.022em;height:1.236em;"></span></span><span class="blank" style="height:1.248em;vertical-align:-0.3em"></span></span></nobr></div> 
+<p class="vspace">Hence, <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmsy10">j</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">B</span></span><span class="cmmi10">eta</span><span class="cmr10">(</span><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span></span><span class="cmr10">;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">T</span><span class="spacer" style="margin-left:0.139em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span class="cmr10">)</span>&nbsp;</span><span class="blank" style="width:12.984em;height:1.236em;"></span></span><span class="blank" style="height:1.1em;vertical-align:-0.3em"></span></span></nobr></span>. This property of fit between a model and its prior is called <a class="urllink" href="http://en.wikipedia.org/wiki/Conjugate_prior" rel="nofollow">conjugacy</a>, which essentially means the posterior is of the same distributional family as the prior. 
+</p>
+<p class="vspace">OK, so now we have a posterior, but what if we want a single number (an estimate).  The most common answer, basically because it is often computationally the easiest, is the maximum a posteriori (MAP) estimate: 
+</p>
+<div class="vspace"></div><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">µ</span><span style="position: relative; top:0.236em;"><span class="size2"><span class="cmmi10">MA</span></span><span class="size2"><span class="cmmi10">P</span></span><span class="spacer" style="margin-left:0.097em"></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:-2.174em; top:-0.263em;"><span class="cmr10">^</span></span><span class="spacer" style="margin-left:1.674em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">arg</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">max</span><span style="position: relative; margin-left:-1.167em; top:0.652em;"><span class="size2"><span class="cmmi10">µ</span></span></span><span class="spacer" style="margin-left:0.687em"></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">arg</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmr10">max</span><span style="position: relative; margin-left:-1.167em; top:0.652em;"><span class="size2"><span class="cmmi10">µ</span></span></span><span class="spacer" style="margin-left:0.687em"></span></span><span style="position: relative; margin-left:0.166em;"><span style="position: relative; top:-0.049em;"><span class="cmr10">(</span></span><span class="cmr10">(</span><span class="cmr10">log</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">log</span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span style="position: relative; top:-0.049em;"><span class="cmr10">)</span></span></span>&nbsp;</span><span class="blank" style="width:27.137em;height:1.236em;"></span></span><span class="blank" style="height:1.809em;vertical-align:-0.802em"></span></span></nobr></div>
+<p class="vspace">For the <span class="typeset"><nobr><span class="scale"><span class="cmmi10">Beta</span><span class="cmr10">(</span><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span><span class="cmr10">;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span class="cmr10">)</span></span></nobr></span> prior, the MAP estimate is:
+</p>
+<div class="vspace"></div><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">µ</span><span style="position: relative; top:0.236em;"><span class="size2"><span class="cmmi10">MA</span></span><span class="size2"><span class="cmmi10">P</span></span><span class="spacer" style="margin-left:0.097em"></span><span class="spacer" style="margin-left:0.05em"></span></span><span style="position: relative; margin-left:-2.174em; top:-0.263em;"><span class="cmr10">^</span></span><span class="spacer" style="margin-left:1.674em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="spacer" style="margin-left:0.12em"></span><span style="position: relative; margin-left:1.820em; top:-0.676em;"><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">1</span></span></span><span style="position: relative; margin-left:-6.148em; top:0.685em;"><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">T</span><span class="spacer" style="margin-left:0.139em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">®</span><span class="spacer" style="margin-left:0.003em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">¯</span><span class="spacer" style="margin-left:0.052em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmsy10">¡</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">2</span></span></span><span style="position: relative; margin-left:-7.969em; top:-0.27em;"><span class="blank" style="border-left:7.969em solid;height:1.5px;"></span></span><span class="spacer" style="margin-left:0.12em"></span></span>&nbsp;</span><span class="blank" style="width:12.297em;height:1.236em;"></span></span><span class="blank" style="height:2.339em;vertical-align:-0.929em"></span></span></nobr></div>
+<p class="vspace">Note that as <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">N</span><span class="spacer" style="margin-left:0.109em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">H</span><span class="spacer" style="margin-left:0.081em"></span></span><span style="position: relative; margin-left:0.222em;"><span class="cmr10">+</span></span><span style="position: relative; margin-left:0.222em;"><span class="cmmi10">T</span><span class="spacer" style="margin-left:0.139em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">!</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">1</span></span>&nbsp;</span><span class="blank" style="width:7.625em;height:1.236em;"></span></span><span class="blank" style="height:0.866em;vertical-align:-0.133em"></span></span></nobr></span>, the prior's effect vanishes and we recover MLE,
+which is what we want: in the evidence of enough data, prior shouldn't matter.
+We will see this vanishing prior effect in many scenarios.
+</p>
+<p class="vspace">MAP estimate is only the simplest Bayesian approach to parameter estimation.  There is much more information in the posterior distribution <span class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span>&nbsp;</span><span class="blank" style="width:3.709em;height:1.236em;"></span></span><span class="blank" style="height:1.1em;vertical-align:-0.3em"></span></span></nobr></span>, so one could ask for the
+posterior mean and variance of the parameter, for example.  Why the mean? Suppose you want to
+predict what the probability of the next flip coming up heads is, given the seen data is exactly the posterior mean:
+</p><div class="typeset"><nobr><span class="scale"><span style="position:relative;"><span style="position:absolute; top:0em; left:0em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">Heads</span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span style="position: relative; top:-1.410em;"><span class="cmex10">Z</span></span><span style="position: relative; top:0.845em;"><span class="size2"><span class="cmmi10">µ</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">Heads;</span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span class="cmmi10">d</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span style="position: relative; top:-1.410em;"><span class="cmex10">Z</span></span><span style="position: relative; top:0.845em;"><span class="size2"><span class="cmmi10">µ</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span></span><span class="cmr10">(</span><span class="cmmi10">Heads</span><span class="cmsy10">j</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span class="cmr10">)</span><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span class="cmmi10">d</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmr10">=</span></span><span style="position: relative; margin-left:0.277em;"><span style="position: relative; top:-1.410em;"><span class="cmex10">Z</span></span><span style="position: relative; top:0.845em;"><span class="size2"><span class="cmmi10">µ</span></span><span class="spacer" style="margin-left:0.05em"></span></span></span><span style="position: relative; margin-left:0.166em;"><span class="cmmi10">µ</span></span><span class="cmmi10">P</span><span class="spacer" style="margin-left:0.139em"></span><span class="cmr10">(</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span><span style="position: relative; margin-left:0.277em;"><span class="cmsy10">j</span></span><span style="position: relative; margin-left:0.277em;"><span class="cmmi10">D</span><span class="spacer" style="margin-left:0.027em"></span></span><span class="cmr10">)</span><span class="cmmi10">d</span><span class="cmmi10">µ</span><span class="spacer" style="margin-left:0.027em"></span>&nbsp;</span><span class="blank" style="width:36.755em;height:1.236em;"></span></span><span class="blank" style="height:2.355em;vertical-align:-0.895em"></span></span></nobr></div>.
+<p class="vspace" style="text-align: center;"> <span class="wikitrail">&lt;&lt; <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Intro">Introduction</a> | <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Trail">Lecture List</a> | <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Gaussians">Gaussians</a> &gt;&gt;</span>
+</p>
+</div>
+
+<br clear="all">
+</div>
+</div>
+
+<!--PageLeftFmt-->
+<div id="grid-left">
+<div id="wiki-left">
+<p class="sidehead"> <a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Main.HomePage">Home</a>
+</p><ul><li><a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Main.Description">Description</a>
+</li><li><a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Main.Policies">Policies</a>
+</li><li><a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Main.People">People</a>
+</li><li><a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Lectures.Lectures">Lectures</a>
+</li><li><a class="wikilink" href="http://learning.cis.upenn.edu/cis520_fall2009/index.php?n=Schedule.Schedule">Schedule</a>
+</li><li><a class="urllink" href="https://courseweb.library.upenn.edu/" rel="nofollow">BlackBoard</a>
+</li><li><a class="urllink" href="http://groups.google.com/group/cis520-2009" rel="nofollow">GoogleGroup</a>
+</li></ul><div class="vspace"></div>
+
+</div>
+</div>
+<!--/PageLeftFmt-->
+
+<!--PageRightFmt--><!--/PageRightFmt-->
+
+</div>
+</div>
+
+<!--PageFootFmt-->
+<div id="wiki-foot">
+<div style="padding:0;padding-top:7px;">Powered by PmWiki
+</div>
+<div class="vspace"></div>
+
+</div>
+<!--/PageFootFmt-->
+
+</div>
+
+<!--HTMLFooter-->
+  <script>
+    jsMath.Autoload.Check();
+    jsMath.Process(document);
+  </script>
+
+
+
+
+
+</body></html>

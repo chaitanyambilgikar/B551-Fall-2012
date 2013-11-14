@@ -1,0 +1,1 @@
+Number of words of length r possible = 26Pr

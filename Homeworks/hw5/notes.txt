@@ -1,0 +1,9 @@
+Sensors available:
+Visual Sensor: 90 degree view. 
+0 if the object is not found, L if it is on the left hand side
+R if its on the right hand side.
+Proximity detector: return binary value. Range is 2 blocks ahead.
+
+
+for question 2:
+objpercepts is the list of observations (Zk's).

@@ -1,0 +1,117 @@
+### Place your written answers in this text file ###
+Done By: Chaitanya Bilgikar
+IU Username: cbilgika
+
+If you worked on this assignment with any other students, please indicate
+their names here:
+Tarun Gulati
+Shailaja Kapoor
+Shreya Rattan
+
+
+
+
+Q1. 
+The evaluation function does the following:
+ - For every state, it extracts every row/column/diagonal as given in THREES
+ - Every each such entry ( row/column/diagonal ), it checks if it is favorable for the player. 
+ - The three main conditions that are checked are:
+	- If there is one piece in that row
+	- If there are 2 pieces in that row
+	- If there are 3 pieces in that row
+ - Note that the number of pieces it checks are exclusive of any concealed pieces.
+ - Weight are assigned for being in each state. A favorable state has more weight than a non favorable state.
+ - There are two main factors in deciding the favorability of a state:
+	- The number of concealed pieces in that row ( and who they belong to )
+	- The location of other players piece. If they are located in such a manner that might lead to him winning, the function turn defensive.
+ - The most unfavorable state for this player is when the opponent has 2 large pieces in a row, and can win in one move.
+ - It is also important to note that this function evaluates a player differently based on whether he is the first player or the second player.
+ - If the player is the first player, the prefered first move is to play a smaller piece.
+ - The main strategy used in this evaluation function is very similar to the one used in the game of tic-tac-toe with the modifications being made to 
+handle the gobbling.
+ - Defensive moves are given maximum points.
+
+Q2.
+Part 1:
+The formula for the maximum number of nodes N at level h of a depth first search tree is given by (branching factor is b):
+((b)^(h+1)-1)/(b-1).
+From this, we can deduce the maximum value of h as:
+h+1 <= log(base b)(M(b-1)+1)
+Eg: Applying this in our case, (with b=30 and M=15), we get an approximate h value as 2(rounded with ceil).
+This seems logical as only around a low horizon, we have a good chance of expanding all branches. At higher horizons, there is a higher chance that
+the player will explore more in one branch than the other.
+Part 2:
+In minimax search, we assume, with some probability, that MIN would behave in a certain way. Normally, we assume that MIN always selects the minimum of
+its childrens values. So, in an ideal case, if we had the computational power to expand the entire game tree, we could say that the value backed up at the 
+root, is value of the most favorable move that the root can make. In a realistic case, since we cannot predict if MIN will take the most ideal move. Hence we
+cannot say we complete guarantee that the value backed up at the root will be the best move for MAX to make.
+
+Q3.
+Part 1: As per the experiments performed, the maximum horizon set without hitting the limit on expansions was 15. The following was taken when the horizon
+was set as 14:
+Beginning gobblet with players cbilgika and srattan using alpha-beta planning.
+
+   |    |   
+------------
+   |    |   
+------------
+   |    |   
+Player 0 search depth 14
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+ Expansion count:  1  Horizon:  0
+tried defensive, value was  -12
+ Expansion count:  1  Horizon:  0
+tried defensive, value was  -28
+ Expansion count:  1  Horizon:  0
+tried defensive, value was  10
+ Expansion count:  1  Horizon:  0
+tried defensive, value was  -35
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  0
+ 
+
+As we can see, at this horizon 0 , there are still permissible expansions left.
+The following was obtained by setting horizon as 15:
+Beginning gobblet with players cbilgika and srattan using alpha-beta planning.
+
+   |    |   
+------------
+   |    |   
+------------
+   |    |   
+Player 0 search depth 15
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  0
+ Expansion count:  0  Horizon:  1
+ Expansion count:  0  Horizon:  1
+ Expansion count:  0  Horizon:  1
+ Expansion count:  0  Horizon:  1
+ Expansion count:  0  Horizon:  1
+ Expansion count:  0  Horizon:  1
+tried defensive, value was  -12
+ Expansion count:  0  Horizon:  1
+tried defensive, value was  -28
+ Expansion count:  0  Horizon:  1
+tried defensive, value was  10
+ Expansion count:  0  Horizon:  1
+
+
+As we can see, the expansion count is 0 even at horizon 0.
+
+Part 2:
+My minmax player wins when it is player 1 and alpha-beta wins when it is player 1
+Part 3:
+Computer player A beating computer player B does not guarantee that A will always win against a human player. This is because, if the computer is
+the opponent, he will always pick the best move (either MAX or MIN). A wins when this assumption is true. The same cannot be said about a human. The 
+human make a sub-optimal move. This may force the computer to make a sub-optimal move. This may result in a loss for the computer player.
+
+Bonus.
+Implements alpha-beta move

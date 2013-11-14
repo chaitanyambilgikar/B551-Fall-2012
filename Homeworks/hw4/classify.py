@@ -1,0 +1,111 @@
+###############################################################################
+# Main Program
+###############################################################################
+import sys
+import os
+from optparse import OptionParser
+from classifiers import *
+import utils
+
+# global variables
+train_dir = './data/train/'
+test_dir = './data/test/'
+fe = utils.FeatureExtractor()
+options = None
+
+def batch_test(classifier,labeledfiles):
+	"""
+	Given a classifier and a list of files with each label,
+	performs classification and print the summary of results
+	"""
+	correct_cnt = 0
+	for filename, label in labeledfiles:
+		wlist = utils.load(filename)
+		if classifier.cl == 'f':
+			classifier.test_one_prep(fe.extract_features(wlist,label)[0],fe.extract_features(wlist,label)[1])
+			continue	
+		else:
+			rlabel = classifier.test_one(fe.extract_features(wlist,label)[0])
+		if options.verbose == True:
+			print filename, '-->', rlabel
+		if rlabel == label:
+			correct_cnt += 1 
+	if classifier.cl == 'f':
+		classifier.test_one_p()
+		#classifier.test_one()
+	else:
+		print "accuracy = %f (%d/%d)" % (float(correct_cnt)/len(labeledfiles), correct_cnt, len(labeledfiles))
+
+if __name__ == '__main__':
+	
+	# process command line
+	USAGE_STRING = \
+	"%prog [options] cat1 cat2\n"\
+	"eg)\t%prog gold coffee,corn\n"\
+	"\t%prog gold,earn coffee,corn\n"\
+	"\t%prog -c b gold coffee,corn\n"\
+	"\t%prog -c d --fsize=100 -q gold coffee,corn\n"\
+	"\t%prog -c d --trmax=1000 -q gold coffee,corn"
+	parser = OptionParser(USAGE_STRING)
+	parser.add_option("-c", dest="classifier", metavar="b/d/t/f", 
+		help="selects between Bayes, Decision tree, third custom classifier and fourth classifier")
+	parser.add_option("--fsize", dest="feature_size", default=100)
+	parser.add_option("--trmax", dest="train_maxsize", default=1000)
+	parser.add_option("-q", action="store_false", dest="verbose", default=True, help="minimize prints")		
+	
+	(options, args) = parser.parse_args()
+	cat1_list = args[0].split(',')
+	cat2_list = args[1].split(',')
+			
+	# choose classifier
+	if options.classifier == None:
+		print 'No classifier specified.  Will take Decision Tree Classifier'
+		cl = DecisionTreeClassifier()
+		print '==== Decision Tree Classifier==='
+	elif options.classifier.startswith('b'):
+		cl = NaiveBayesClassifier()
+		print '==== Naive Bayesian Classifier==='
+	elif options.classifier.startswith('d'):
+		cl = DecisionTreeClassifier()
+		print '==== Decision Tree Classifier==='
+	elif options.classifier.startswith('t'):
+		cl = ThirdClassifier()
+		print '==== Third (Custom) Classifier==='
+	elif options.classifier.startswith('f'):
+		cl = FourthClassifier()
+		print '==== Fourth (Custom) Classifier==='
+	else:
+		print 'Invalid classifier. Will take Decision Tree Classifier'
+		cl = DecisionTreeClassifier()
+		print '==== Decision Tree Classifier==='
+		
+	print 'Number of Features (words) to use =', options.feature_size
+	
+	# prepare a list of files with label attached 
+	cat1_label = 'cat1'
+	cat2_label = 'cat2'
+	labeledtopics = [(topic,cat1_label) for topic in cat1_list] + [(topic,cat2_label) for topic in cat2_list]
+	labeledfiles = utils.get_labeledfiles(train_dir,labeledtopics)
+	# labeledfiles eg) [('./data/train/earn\\10000.txt', 'cat1'), ('./data/train/earn\\10002.txt', 'cat1') ...]
+	#print len(labeledfiles)
+	
+	# create featureset
+	print 'Creating featureset ...'
+	fe.create_featureset(labeledfiles,int(options.feature_size),int(options.train_maxsize))
+	
+	# build train examples by extract features for the files for train
+	print 'Building train examples, each of which is a tuple (features, label)...'
+	train_examples = fe.build_examples(labeledfiles,int(options.train_maxsize))
+
+	# train classifier by building (discrete) probabilty distributions 
+	labels = zip(*train_examples)[1]
+	
+	print "Training %d (cat1:%d, cat2:%d) samples ..." % (len(train_examples),list(labels).count(cat1_label),list(labels).count(cat2_label))
+	cl.train(train_examples,fe.featureset)
+
+	# calculate probabilty  Sigma(logP(label)+logP(fname=fval|label))
+	# and pick the label that makes it the maximum
+	print 'Testing...'
+	labeledfiles = utils.get_labeledfiles(test_dir,labeledtopics)
+	batch_test(cl,labeledfiles)
+	

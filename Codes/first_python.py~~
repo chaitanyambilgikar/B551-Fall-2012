@@ -1,0 +1,8 @@
+list = ['hello','new to python','1234']
+print list
+
+list = list + ['second']
+print list
+
+tinydict = {'name':'Chaitanya','Age':22,'Status':'In love'}
+print tinydict['Status']

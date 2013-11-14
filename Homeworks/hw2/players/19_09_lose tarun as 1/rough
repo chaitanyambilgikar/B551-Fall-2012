@@ -1,0 +1,180 @@
+if flag1+flag2+flag3==1:
+			  #checking if i am first player:
+			  if mine==0:
+				  if flag1==1:
+					  #check if its my piece
+					  if piece_one.player==mine:
+						  #check if its a large piece
+						  if piece_one.size==2:
+							  value[mine]-=1
+							  continue
+						  #check if its a medium piece
+						  elif piece_one.size==1:
+							  value[mine]+=1
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]+=3
+							  continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_one.size==2:
+							  value[mine]-=3
+							  continue
+						  #check if its a medium piece
+						  elif piece_one.size==1:
+							  value[mine]-=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+				  elif flag2==1:
+					  #check if its my piece
+					  if piece_two.player == mine:
+						  #check if its a large piece
+						  if piece_two.size==2:
+							  value[mine]-=1
+							  continue
+						  #check if its a medium piece
+						  elif piece_two.size==1:
+							  value[mine]+=1
+							  continue
+						  else:
+							  value[mine]+=3
+							  continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_two.size==2:
+							  value[mine]-=3
+							  continue
+						  #check if its a medium piece
+						  elif piece_two.size==1:
+							  value[mine]-=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+				  elif flag3==1:
+					  #check if its my piece
+					  if piece_three.player==mine:
+						 #check if its a large piece
+						 if piece_three.size==2:
+							 value[mine]-=1
+							 continue
+						 #check if its a medium piece
+						 elif piece_three.size==1:
+							 value[mine]+=1
+							 continue
+						 #its a small piece
+						 else:
+							 value[mine]+=3
+							 continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_three.size==2:
+							  value[mine]-=3
+							  continue
+						  #check if its a medium piece
+						  if piece_three.size==1:
+							  value[mine]-=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+			  #check if i am second player
+			  if mine==1:
+				  if flag1==1:
+					  #check if its my piece
+					  if piece_one.player ==  mine:
+						  #check if its a large piece
+						  if piece_one.size==2:
+							  value[mine]+=3
+							  continue
+						  #check if its a medium piece
+						  elif piece_one.size==1:
+							  value[mine]+=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]+=1
+							  continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_one.size==2:
+							  value[mine]-=2
+							  continue
+						  #check if its a medium piece
+						  elif piece_one.size==1:
+							  value[mine]-=1
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+				  elif flag2==1:
+					  #check if its my piece
+					  if piece_two.player==mine:
+						  #check if its a large piece
+						  if piece_two.size==2:
+							  value[mine]+=3
+							  continue
+						  #check if its a medium piece
+						  elif piece_two.size==1:
+							  value[mine]+=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]+=1
+							  continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_two.size==2:
+							  value[mine]-=2
+							  continue
+						  #check if its a medium piece
+						  if piece_two.size==2:
+							  value[mine]-=1
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+				  elif flag3==1:
+					  #check if its my piece
+					  if piece_three.player ==  mine:
+						  #check if its a large piece
+						  if piece_three.size == 2:
+							  value[mine]+=3
+							  continue
+						  #check if its a medium piece
+						  elif piece_three.size == 1:
+							  value[mine]+=2
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]+=1
+							  continue
+					  #not my piece
+					  else:
+						  #check if its a large piece
+						  if piece_three.size==2:
+							  value[mine]-=2
+							  continue
+						  #check if its a medium piece
+						  elif piece_three.size==1:
+							  value[mine]-=1
+							  continue
+						  #its a small piece
+						  else:
+							  value[mine]-=1
+							  continue
+						  
+						  

@@ -1,0 +1,84 @@
+### Place your written answers in this text file ###
+
+If you worked on this assignment with any other students, please indicate
+their names here:
+Tarun Gulati
+Shailaja Kapoor
+
+
+
+Q1. 
+  1. In the worst case, a word of length n can generate 26Pn words (where P is permutations and nPr = (n!)/(n-r)!). If all these words are legal (i.e. they exist in the dictionary), then the tree will have 26Pn branches. Hence the worst case branching factor can be 26Pn.
+  
+  2. The following cases were tested. Here n=4.
+  So theoretically, the worst-case branching factor will be 26P4 = 358,800
+  make to maid : 21
+  take to talk: 20
+  Fail to fell: 19
+  So we can say that effective branching factor = 0.005% of Worst-case branching factor.
+  
+  3. In the worst-case, branching factor is 26Pn. Total number of nodes generated will be given by:
+    ( ((26Pn)^d+1) -1) / (26Pn -1) = M^a.
+    Here we equate the total number of nodes generated to M^a for a reason. The reasoning is as follows:
+    In the worst case, all the words in the dictionary might be generated. But, since we have not included revisit option here, any node could be generated 'a' number of times.
+    Hence, the entire dictionary can be generated 'a' times.
+    
+Q2.
+ 1. Yes. IDS can return faliure in some cases. Consider the following hypothetical case:
+ Assume the start word as 'start' and the goal word as 'goal'. Suppose IDS encouters a state s, which does not have any successors.
+ In this case, IDS will not set the flag to cutoff. Assume that all words at a level L do not have any successors. In this case, even though cutoff was not reached (assuming L is less than cutoff), IDS cannot proceed any further and will return Failure.
+ 
+ 2. Consider the follwing observations:
+ * E- Total number of nodes expanded, G- Total number of nodes generated *
+ ======================================
+ Example taken	|	IDS		|	BFS
+======================================
+ make-maid		|	439(E)	|	440(E)
+			|	9479(G)	|	9613(G)
+---------------------------------------------------------------
+cake-male		|	7(E)		|	7(E)
+			|	131(G)		|	150(G)
+---------------------------------------------------------------
+coal-colt		|	6(E)		|	6(E)
+			|	86(G)		|	94(G)
+---------------------------------------------------------------
+fail-fire		|	360(E)	|	362(E)
+			|	6533(G)	|	6570(G)
+======================================
+				
+The above information shows that there is not much of a difference in the total number of nodes generated or expanded between IDS and BFS.
+As, for the opitimality, since IDS is optimal,it will return an optimal path. The same can be said about BFS as well (since step cost is not being considered here).
+
+Q3.
+ 1. The following are the results of some of the test cases. (G - total number of nodes generated, E - total number of nodes expanded, R - total number of nodes revisited)
+ =================================================================	||
+ Test Case		||			BFS			||		BFS-Revisit			||
+			||------------------------------------------||------------------------------------------	||
+			||  	G	|	E	|	R	||	G	|	E	|	R	||
+ =================================================================||
+ fail - fire		||  	6570	|	362	|	0	||	580	|	134	|	1419	||
+ -----------------------------------------------------------------------------------------------------------||
+ coal - colt		||	94	|	6	|	0	||	76		6	|	18	||
+ ----------------------------------------------------------------------------------------------------------	||
+ cake - male		||	150	|	7	|	0	||	84	|	7	|	66	||
+ ----------------------------------------------------------------------------------------------------------	||
+ make - maid	||	9613	|	440	|	0	||	1001	|	222	|	3452	||
+ 
+ 2. Again, lets assume a tree with a branching factor b and maximum depth d. 
+ In the worst-case, total number of nodes generated would be equal to the total number of nodes in the dictionary, M.
+ So,
+  [b^(d+1) - 1] / [b-1] = M.
+  This gives us d = log(base b) [M(b-1)] - 1, which is nothing but the maximum depth of the tree in the worst case.
+ Q4.
+ 1. The heuristic function I have chosen is Hamming distance.
+ The Hamming distance between two strings of equal length (words in this case), the total number of substitutions required to convert the start word to the goal word. 
+ Eg: Hamming distance between 'mad' and 'bat' is 2.
+ Is it admissible?
+ Yes, it is admissible. Hamming distance between a set of words always represents the minimum number of changes that have to be made to get to the goal state. 
+ Is it consistent?
+ 
+Bonus.
+For this question, I have considered the length of the genereated dictionary as the limit. If after any iteration of IDS, the total number of nodes generated in that iteration exceeds the size of the dictionary, 
+then the query is considered infeasible. This strategy has one flaw. Since there is no check for revisited states in IDS, the total number of nodes generated may include multiple versions of the same node. This could
+mean that not all words in the dictionary are generated. Although it has this flaw, this  strategy works in most cases. To implement revisited states in IDS would include an enormous amout of memory overload
+as the list of visited nodes will have to be cleared before every iteration. 

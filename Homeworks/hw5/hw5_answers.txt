@@ -1,0 +1,28 @@
+### Place your written answers in this text file ###
+
+If you worked on this assignment with any other students, please indicate
+their names here:
+Tarun Gulati
+Shailaja Kapoor
+Deepesh Thakkar
+Nasheed
+
+
+
+Q1. 
+
+    a. In the given code, the goalsensor model is perfect. This means that it
+    does not generate any errors. The object sensor model consists of a visibility sensor and a proximity sensor.
+    Each sensor has a false positive and a false negative error. It is due to these errors that the object sensor model returns some wrong observations. This leads to a growth in the uncertainity of an object in some states. The goal sensor model, being perfect does no return any wrong observations and hence the uncertainity of a goal states always decreases.
+    
+
+    b. Yes, the factored belief state does correctly represent the true bayesian posterior of the belief state. This is because, with a factored representation, we can correctly break down the conditional dependence of each variable. Also, the uncertainity in the value can be represented correctly. The representation does not depend on the number of obstacles N as it can be easily represented by breaking it down into conditional probabilities. 
+
+Q2.
+
+    a. Finding the most-likely sequence using the Viterbi algorithm is similar to getting a sequence using filtering. However, there are some changes. In Filtering, we get the next state based only on the observations and the previous state. We calculate the probability as P(Xt+1 | o 1:t+1) = alpha * Sum over Xt (P(Xt+1|Xt)P(Xt|o 1:t))
+    So here, we are taking the sum over all the previous states to arrive at the current state.
+    In Viterbi, we are taking only that Xt into the sequence that maximizes P(Xt+1|Xt)P(x 1:t|o 1:t).
+    So since we are taking the Xt that maximizes this probability, we end up with a different sequence as compared to the obtained from filtering.
+
+    b. For the given representation of states, the location of an agent is independent of the position of other agents. Hence, using this, P(Qoi t+1 | Qoi t,Q A ) = P (Qoi t+1|Qoi t) (by definiton of conditional independence). No matter where our agent (A) is, this does not affect the probability of the other agents location at any time t. So, there will be no change in most-likely-tranjectory. On the other hand, if the agents behavior does depend on the moves made by the other agents, then the calculation of transition probabilities would change. To inculcate this change, we will have to makes changes to the code.

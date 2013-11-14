@@ -1,0 +1,598 @@
+from __future__ import division
+from PyML import *
+from nltk.corpus import reuters
+
+import os
+import math
+import sys
+import utils
+import time
+
+########################################################################################
+# Naive Bayesian Classifier
+########################################################################################
+class NaiveBayesClassifier():
+	"""
+	A Naive Bayes classifier.  
+	Naive Bayes classifiers use two probability distributions: 
+       - P(label) gives the probability that an input will receive each 
+         label, given no information about the input's features. 
+       - P(fname=fval|label) gives the probability that a feature 
+         (fname) will be a value (fval), given the label (label). 
+	"""
+	def __init__(self):
+		self.cl = 'b'
+		
+	def train(self,examples,featureset):
+		"""
+                Implement this for Problem I
+                
+		featureset - set of features
+			eg) set(['EXIST_to', 'EXIST_its', 'EXIST_of'])
+		examples - list of examples
+			An example is a tuple (features, label) while features is a dictionary of feature name:value pair
+			eg)
+			[
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': True}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat1')
+			...
+			]
+
+		This method constructs probability distributions for  P(label), P(fname=fval|label) 
+		"""
+		
+		# Get the list of labels. eg) ['cat1','cat2','cat1','cat1','cat1',...]
+		# Get a list of feature values for each (label,fname) values in the examples
+		# 	which means for 2 labels and 10 features, we will have 2*10 probability distributions
+		labels = []	
+		vals = {}	# note this is a dictionary of the key:value pair (label,fname):list(fval)
+		# This is a list of all unique words in the training set
+		self.fnames = []
+		for features, label in examples: 
+			labels.append(label)
+			for fname, fval in features.items(): 
+				if fname not in self.fnames:
+					self.fnames.append(fname)
+				if (label,fname) not in vals:
+					vals[(label,fname)] = []
+				vals[(label,fname)].append(fval)
+		
+		# save the label list for possible future use
+		self.labelset = set(labels)
+		#print fnames
+		#print self.fnames
+		uniform_prior = ['cat1','cat2']
+		self.p_label = utils.ProbDist(True)
+		#Currently uses uniform_prior
+		self.p_label.maximumLikelihood(uniform_prior)
+		#use this for non uniform prior
+		#self.p_label.maximumLikelihood(labels)
+		print self.p_label.data
+		hyperpara = [2,3]
+		# get P(label)
+		# construct a ProbDist (probability distribution) with the list 'labels'
+		# e.g.
+		#   self.p_label = utils.ProbDist()
+		#   self.p_label.dict('val1') = p1
+		#   self.p_label.dict('val2') = p2
+		#   etc
+
+		# Put your code	here
+		 
+		
+		# get P(fname=fval|label)
+		# construct probability distributions with the dictionary 'vals' whose values are lists of feature values
+		# See 'utils.ProbDist.maximumLikelihood' for an example
+
+		# Put your code here	
+		#the following two lists contain lists for every word in fnames
+		temp_for_first_fname_cat1 = [[] for i in range(len(self.fnames))]
+		temp_for_first_fname_cat2 = [[] for i in range(len (self.fnames))]
+		counter = 0
+		for k in self.fnames:
+			for (i,j) in vals.keys():
+				if j == k:
+					if i == 'cat1':
+						temp_for_first_fname_cat1[counter] = temp_for_first_fname_cat1[counter] + vals[(i,j)]
+					else:
+						temp_for_first_fname_cat2[counter] = temp_for_first_fname_cat2[counter] + vals[(i,j)]
+			counter+=1
+		self.prob_given_cat = {}
+		temp = utils.ProbDist(True)
+		for i in range(len(self.fnames)):
+			temp.maximumAPosteriori(temp_for_first_fname_cat1[i],hyperpara)
+			self.prob_given_cat[(self.fnames[i],'cat1')] = temp.data
+		for i in range(len(self.fnames)):
+			temp.maximumAPosteriori(temp_for_first_fname_cat2[i],hyperpara)
+			self.prob_given_cat[(self.fnames[i],'cat2')] = temp.data
+		
+	def test_one(self,features):
+		"""
+                Implement this for Problem I
+
+		Given a series of features corresponding to a text file,
+		Compute log P(label|features) = log P(label) + log P(features|label) for each label
+		and return the label that maximizes this expression.
+		
+		features is a dictory of feature_name:value pair
+		eg) {'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}
+		"""
+		
+		# Replace the following line with your code.
+		# For your convenience, 'utils.get_maxitem(dict)' returns the key whose value is the maximum in the dictionary
+		prob_of_label_given_feat = {'cat1' : 0 , 'cat2' : 0}
+		for i in features.keys():
+			if features[i] in self.prob_given_cat[(i,'cat1')].keys():
+				prob_of_label_given_feat['cat1'] += math.exp(sum(self.p_label.data.values()) + self.prob_given_cat[(i,'cat1')][features[i]])
+			if features[i] in self.prob_given_cat[(i,'cat2')].keys():
+				prob_of_label_given_feat['cat2'] += math.exp(sum(self.p_label.data.values()) + self.prob_given_cat[(i,'cat2')][features[i]])
+		#print prob_of_label_given_feat
+		(a,b) = utils.get_maxitem(prob_of_label_given_feat)
+		return a
+				
+########################################################################################
+# Decision Tree Classifier
+########################################################################################
+class DTNode():
+	"""
+	Decision Tree node class
+	For a branching node, self.name is the feature name and 
+	self.branch is a dictionary from feature values -> subtree (a subtree is also a DTNode)
+	For a leaf node, self.name represents the label
+	"""
+	def __init__(self,name=None,branch=None):
+		self.name = name
+		self.branch = branch
+
+	def show(self,indent):
+		"""
+		This pretty prints the tree structure.
+		Looks good for the feature value 'True/False' but works for others as well
+		"""
+		name = self.name
+		if name == None:
+			name = "None"
+		elif isinstance(name,int):
+			name = "%d" % name
+		s = indent + name + "\n"
+		if self.branch != None:
+			for val in self.branch:
+				if val == True:
+					v = 't'
+				elif val == False:
+					v = 'f'
+				else:
+					v = '|'
+				s += self.branch[val].show(indent+v+" ")
+		return s
+
+	def classify(self,features):
+		"""
+		Given a new example (dictionary of features:values), descend the tree
+		until a leaf is reached.
+		
+		If a feature value of the example is missing from the node's branching structure
+		(because it hasn't been seen before during training), then an arbitrary
+		branch is taken instead.
+		"""
+		if self.branch != None:	
+			fval =  features[self.name]
+			if fval in self.branch:
+				return self.branch[fval].classify(features)
+			else:	# havn't seen this case in training examples
+				anykey = self.branch.keys()[0]
+				return self.branch[anykey].classify(features)
+		else:	# leaf node. in this case, its name is a label not a feature name
+			return self.name
+			
+class DecisionTreeClassifier():
+	"""
+	"""
+	def __init__(self):
+		self.cl = 'd'
+		
+	def train(self,examples,featureset):
+		"""
+		"""
+		self.tree = self.decision_tree_learning(examples,featureset.copy())
+		print self.tree.show("")
+		#print self.tree.name, self.tree.branch
+	
+	def decision_tree_learning(self,examples,featuresett):
+		"""
+                Implement this for Problem II
+                
+		examples - list of examples
+		featureset - set of available features
+		
+		Return value is a DTNode.
+		"""
+		# get the list of labels from the examples 
+		
+		# if examples is empty then return default
+		# else if all examples have the same classification then return a Tree whose name is the classification
+		# else if featureset is empty then return a Tree whose name is the majority label value from the list of labels
+		# else # need to expand unlike the above three cases where we return leaf nodes having labels as their name
+		# 	best_fname = self.choose_feature(featureset,examples)
+		# 	tree = a Tree whose name is the best_fname
+		# 	m = majority label value
+		#
+		# 	apply best_fname feature to all examples and split them into N subsets 
+		#			where N is the number of best_fname values in the whole examples
+		#			It would be easier to use a dictionary 'sub_examples' of the key:value pair
+		#			a best_fname value : a list of examples
+		#			so that sub_examples[best_fname value] returns a sub list of examples.
+		#		for each best_fname value 'fval'
+		#			subtree = self.decision_tree_learning(sub_examples[fval],featureset-set([best_fname]),m)
+		#			assign the subtree to tree.branch[fval]
+		# 	return tree
+		
+		# replace the following line with your code
+		
+		
+		#if examples is empty then return a default value
+		#"""
+		if not examples:
+			#print "Found Empty examples.."
+			return DTNode(name='cat1')
+		elif self.same_classification(examples) != (False,False):
+			#print " Same classifications found"
+			a,b = self.same_classification(examples)
+			return DTNode(name = b)
+		elif not featuresett:
+			#print " Empty featureset"
+			return DTNode(name = self.Majority_Values(examples))
+		else:
+			best = self.choose_feature(featuresett,examples)
+			#print "Best Feature chosen was: ",best
+			new_tree = DTNode(name = best)
+			split_examples = self.split_list(examples,best)
+			reduced_featureset = featuresett - set([best])
+			new_subtree_true = self.decision_tree_learning(split_examples[True],reduced_featureset)
+			new_subtree_false = self.decision_tree_learning(split_examples[False],reduced_featureset)
+			if new_tree.branch == None:
+				new_tree.branch = {}
+			new_tree.branch[True] = new_subtree_true
+			new_tree.branch[False] = new_subtree_false
+			return new_tree
+		
+		
+		#"""
+		#temp = self.split_list(examples,'EXIST_miners')
+		#return DTNode(name='cat1')
+	def Majority_Values(self, examples):
+		x,y = zip (*examples)
+		if y.count('cat1') > y.count('cat2'):
+			return 'cat1'
+		else:
+			return 'cat2'
+	def same_classification(self,examples):
+		a,b = zip(*examples)
+		if len(b) == b.count('cat1'):
+			return (True,'cat1')
+		elif len(b) == b.count('cat2'):
+			return (True,'cat2')
+		else:
+			return (False,False)
+		
+	def get_pk_nk(self,splitted_examples):
+		pk_nk = {'positive':[],'negative':[]}
+		for a,label in splitted_examples:
+			if label == 'cat1':
+				pk_nk['positive'].append((a,label))
+			else:
+				pk_nk['negative'].append((a,label))
+		return pk_nk
+	def split_list(self,examples,feature):
+		#This will return a dict {True: sublist of examples where feature is true,False:sublist where feature is false}
+		
+		splitted_dict = {True:[],False:[]}
+		for (a, label) in examples:
+			if feature in a.keys():
+				if a[feature] == True:
+					splitted_dict[True].append((a,label))
+				else:
+					splitted_dict[False].append((a,label))
+		return splitted_dict
+	def get_B(self,q):
+		if q == 0:
+			return 0
+		return (-q)*(math.log(q,2) + ((1-q)*math.log(1-q,2)))
+	def choose_feature(self,featureset,examples):
+		"""
+                Implement this for Problem II
+                
+		Among the given featureset, return the feature that leads to the
+		best split among the given list of examples.
+		"""
+		# replace the following line with your code
+		gain = {}
+		main_split = self.get_pk_nk(examples)
+		num_main_split = {'p':len(main_split['positive']),'n':len(main_split['negative'])}
+		for each_feature in featureset:
+			examples_where_feature = self.split_list(examples,each_feature)
+			#number_from_split = {True: len(examples_where_feature[True]),False:len(examples_where_feature[False])}
+			#number_from_split contains those examples where feature is true and feature is false. 
+			#Each sublist then has pk positive samples and nk negative samples. Get that first.
+			#print number_from_split
+			pos_neg_true = self.get_pk_nk(examples_where_feature[True])
+			pos_neg_false = self.get_pk_nk(examples_where_feature[False])
+			num_pos_neg_true = {'pk':len(pos_neg_true['positive']),'nk':len(pos_neg_true['negative'])}
+			num_pos_neg_false = {'pk':len(pos_neg_false['positive']),'nk':len(pos_neg_false['negative'])}
+			#print num_pos_neg_false
+			#print num_pos_neg_true
+			remainder_true_part = (sum(num_pos_neg_true.values())/sum(num_main_split.values()))* self.get_B(num_pos_neg_true['pk']/(sum(num_main_split.values())))
+			remainder_false_part = (sum(num_pos_neg_false.values())/sum(num_main_split.values()))* self.get_B(num_pos_neg_false['pk']/(sum(num_main_split.values())))
+			remainder = remainder_true_part + remainder_false_part
+			#print remainder_false_part
+			#print remainder_true_part
+			#print remainder
+			first_term = self.get_B(num_main_split['p']/sum(num_main_split.values()))
+			#print first_term
+			gain[each_feature] = first_term - remainder
+			
+			#gain[each_feature] = entropy()
+		#print gain
+		max_gain = utils.get_maxitem(gain)
+		#print max_gain
+		return max_gain[0]	# return the feature with the maximum gain
+
+	def test_one(self,features):
+		"""
+		"""		
+		rlabel = self.tree.classify(features)
+		#print "Label returned was: ",rlabel
+		return rlabel
+
+########################################################################################
+# Third Classifier
+########################################################################################
+# If you want to change the name of the class
+# you also need to change the clasifier selection part (line 70) in the file 'classfiy.py'
+class ThirdClassifier():
+	def __init__(self):
+		self.cl = 't'
+		
+	def train(self,examples,featureset):
+		"""
+		"""
+		temp = utils.FeatureExtractor()
+		useless_words = temp.get_stopwords()
+		#print useless_words
+		self.tree = self.decision_tree_learning(examples,featureset.copy()-useless_words)
+		print self.tree.show("")
+		#print self.tree.name, self.tree.branch
+	
+	def decision_tree_learning(self,examples,featuresett):
+		"""
+                Implement this for Problem II
+                
+		examples - list of examples
+		featureset - set of available features
+		
+		Return value is a DTNode.
+		"""
+		# get the list of labels from the examples 
+		
+		# if examples is empty then return default
+		# else if all examples have the same classification then return a Tree whose name is the classification
+		# else if featureset is empty then return a Tree whose name is the majority label value from the list of labels
+		# else # need to expand unlike the above three cases where we return leaf nodes having labels as their name
+		# 	best_fname = self.choose_feature(featureset,examples)
+		# 	tree = a Tree whose name is the best_fname
+		# 	m = majority label value
+		#
+		# 	apply best_fname feature to all examples and split them into N subsets 
+		#			where N is the number of best_fname values in the whole examples
+		#			It would be easier to use a dictionary 'sub_examples' of the key:value pair
+		#			a best_fname value : a list of examples
+		#			so that sub_examples[best_fname value] returns a sub list of examples.
+		#		for each best_fname value 'fval'
+		#			subtree = self.decision_tree_learning(sub_examples[fval],featureset-set([best_fname]),m)
+		#			assign the subtree to tree.branch[fval]
+		# 	return tree
+		
+		# replace the following line with your code
+		
+		
+		#if examples is empty then return a default value
+		#"""
+		if not examples:
+			#print "Found Empty examples.."
+			return DTNode(name='cat1')
+		elif self.same_classification(examples) != (False,False):
+			#print " Same classifications found"
+			a,b = self.same_classification(examples)
+			return DTNode(name = b)
+		elif not featuresett:
+			#print " Empty featureset"
+			return DTNode(name = self.Majority_Values(examples))
+		else:
+			best = self.choose_feature(featuresett,examples)
+			#print "Best Feature chosen was: ",best
+			new_tree = DTNode(name = best)
+			split_examples = self.split_list(examples,best)
+			reduced_featureset = featuresett - set([best])
+			new_subtree_true = self.decision_tree_learning(split_examples[True],reduced_featureset)
+			new_subtree_false = self.decision_tree_learning(split_examples[False],reduced_featureset)
+			if new_tree.branch == None:
+				new_tree.branch = {}
+			new_tree.branch[True] = new_subtree_true
+			new_tree.branch[False] = new_subtree_false
+			return new_tree
+		
+		
+		#"""
+		#temp = self.split_list(examples,'EXIST_miners')
+		#return DTNode(name='cat1')
+	def Majority_Values(self, examples):
+		x,y = zip (*examples)
+		if y.count('cat1') > y.count('cat2'):
+			return 'cat1'
+		else:
+			return 'cat2'
+	def same_classification(self,examples):
+		a,b = zip(*examples)
+		if len(b) == b.count('cat1'):
+			return (True,'cat1')
+		elif len(b) == b.count('cat2'):
+			return (True,'cat2')
+		else:
+			return (False,False)
+		
+	def get_pk_nk(self,splitted_examples):
+		pk_nk = {'positive':[],'negative':[]}
+		for a,label in splitted_examples:
+			if label == 'cat1':
+				pk_nk['positive'].append((a,label))
+			else:
+				pk_nk['negative'].append((a,label))
+		return pk_nk
+	def split_list(self,examples,feature):
+		#This will return a dict {True: sublist of examples where feature is true,False:sublist where feature is false}
+		
+		splitted_dict = {True:[],False:[]}
+		for (a, label) in examples:
+			if feature in a.keys():
+				if a[feature] == True:
+					splitted_dict[True].append((a,label))
+				else:
+					splitted_dict[False].append((a,label))
+		return splitted_dict
+	def get_B(self,q):
+		if q == 0:
+			return 0
+		return (-q)*(math.log(q,2) + ((1-q)*math.log(1-q,2)))
+	def choose_feature(self,featureset,examples):
+		"""
+                Implement this for Problem II
+                
+		Among the given featureset, return the feature that leads to the
+		best split among the given list of examples.
+		"""
+		# replace the following line with your code
+		gain = {}
+		main_split = self.get_pk_nk(examples)
+		num_main_split = {'p':len(main_split['positive']),'n':len(main_split['negative'])}
+		for each_feature in featureset:
+			examples_where_feature = self.split_list(examples,each_feature)
+			#number_from_split = {True: len(examples_where_feature[True]),False:len(examples_where_feature[False])}
+			#number_from_split contains those examples where feature is true and feature is false. 
+			#Each sublist then has pk positive samples and nk negative samples. Get that first.
+			#print number_from_split
+			pos_neg_true = self.get_pk_nk(examples_where_feature[True])
+			pos_neg_false = self.get_pk_nk(examples_where_feature[False])
+			num_pos_neg_true = {'pk':len(pos_neg_true['positive']),'nk':len(pos_neg_true['negative'])}
+			num_pos_neg_false = {'pk':len(pos_neg_false['positive']),'nk':len(pos_neg_false['negative'])}
+			#print num_pos_neg_false
+			#print num_pos_neg_true
+			remainder_true_part = (sum(num_pos_neg_true.values())/sum(num_main_split.values()))* self.get_B(num_pos_neg_true['pk']/(sum(num_main_split.values())))
+			remainder_false_part = (sum(num_pos_neg_false.values())/sum(num_main_split.values()))* self.get_B(num_pos_neg_false['pk']/(sum(num_main_split.values())))
+			remainder = remainder_true_part + remainder_false_part
+			#print remainder_false_part
+			#print remainder_true_part
+			#print remainder
+			first_term = self.get_B(num_main_split['p']/sum(num_main_split.values()))
+			#print first_term
+			gain[each_feature] = first_term - remainder
+			
+			#gain[each_feature] = entropy()
+		#print gain
+		max_gain = utils.get_maxitem(gain)
+		#print max_gain
+		return max_gain[0]	# return the feature with the maximum gain
+	
+	def test_one(self,features):
+		"""
+		"""		
+		print len(features)
+		temp = utils.FeatureExtractor()
+		useless_words = temp.get_stopwords()
+		for i in features.keys():
+			if i in useless_words:
+				del features[i]
+		rlabel = self.tree.classify(features)
+		#print "Label returned was: ",rlabel
+		print len(features)
+		return rlabel
+		
+class FourthClassifier():
+	"""
+        Implement this for Problem III
+	"""
+	def __init__(self):
+		self.cl = 'f'
+		self.thing = []
+	def train(self,examples,featureset):
+		# replace the following line with your code
+		self.s = SVM()
+		f =  open('temp_train.data','w')
+		for i,j in examples:
+			f.write(j)
+			f.write(" ")
+			for each in i.keys():
+				if i[each] == True:
+					f.write(each)
+					f.write(":1")
+				else:
+					f.write(each)
+					f.write(":0")
+				f.write(" ")
+			f.write("\n")
+		f.close()
+		data = SparseDataSet('temp_train.data')
+		print data
+		self.s.train(data)
+		#self.s.cv(data,5)
+	def test_one_prep(self,features,label):
+		# replace the following line with your code
+		self.thing.append((features,label))
+		#print self.thing
+		"""
+		f = open ('temp_test.data','w')
+		f.seek(0,os.SEEK_END)
+		f.write(label)
+		f.write(" ")
+		for i in features.keys():
+			if features[i] == True:
+				f.write(i)
+				f.write(":1")
+			else:
+				f.write(i)
+				f.write(":0")
+			f.write(" ")
+		f.write("\n")
+		f.close()
+		#testdata = SparseDataSet('temp_test.data')
+		#result = self.s.test(testdata)
+		#print result
+		"""
+	def test_one_p(self):
+		f = open ('temp_test.data','w')
+		for (features,label) in self.thing:
+			f.write(label)
+			f.write(" ")
+			for i in features.keys():
+				if features[i] == True:
+					f.write(i)
+					f.write(":1")
+				else:
+					f.write(i)
+					f.write(":0")
+				f.write(" ")
+			f.write("\n")
+		f.close()
+		testdata = SparseDataSet('temp_test.data')
+		result = self.s.test(testdata)
+		print result
+	def test_one(self):
+		pass
+	

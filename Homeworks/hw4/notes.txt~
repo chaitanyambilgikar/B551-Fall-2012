@@ -1,0 +1,6 @@
+so we are predicting the topic of a file given the contents of the file (the word and their frequency), and the label of the file.
+in the function train() in Naive Bayes Classifier: 
+examples: Contains a dict of all words in each file + label of that file
+fname contains the"EXISTS_" part and fval contains "True/False"
+
+prob (a|b) = prob(b|a)

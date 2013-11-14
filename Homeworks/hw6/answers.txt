@@ -1,0 +1,28 @@
+I have worked with the following people for this assignment:
+Tarun Gulati
+Nasheed
+Shreya Rattan
+Deepesh Thakkar
+
+
+1a. Go straight to the goal. The goal list would then have just the final goal in it all the time.
+1b.	To solve the second scenario without using the random actions, we can take a sub optimal step at regular intervals. This will help you to take the uncertainity of the goal states into consideration.
+
+2a. At every step, our agent takes a step towards the cell that has the minimum potential. If there is a collision, such a step is not taken. So, if keep a count of the number of steps that lead us to the cell containing the minimum potential, then we can keep a track of how courteous our agent is. Another possible metric is to divide the absolute value of the rewards by the number of steps taken. But this will not work if the other agent bumps into yours (thats when he is given more negative rewards and not yours, but this also counts as a collision).
+
+2b. So in this improved policy, i am taking into account all the grid cells instead of just the ones that can be reached by the agent making one valid action (as it was previously being calculated). This improves the agents sensing and decision making as it can now take a step towards the cell that has the minimum potential in the entire grid. Also, to improve this even further, i have increased the repulsive range to 4(it was 3 before). This makes the search deeper and the agent is more aware (the psum value is increased more for more cells than before).
+
+2c.I did the following comparision. The value represents the sum of the potential values for all the steps that the agent takes.
+for my agent:
+187.143819426
+for the agent that was originaly provided to us:
+191.18306572
+It is important to note that B crashes into A several times.
+
+
+3a.I am using the goal pursuing and collision avoidance policies for this question. My agent behaves greedily. That is, it takes a step towards the goal when the minimum potential value is less than the distance to the goal. This way, if the other agent is far away, it takes a step towards the goal. If the agent is close enough, it will take evasive action.
+
+3b. To handle uncertainity in the goal positions, i am using the same concept as before. Using the ramdomness in the goal state.
+Object uncertainity is being handled by the potential value. Since we are not sure where the object might be, the potential values will be different for the same cell at different time steps. Since we are chosing our actions based on this potential, we will be taking uncertainity in object positions into consideration in our actions.
+3c.
+My agent performs better in all scenarios except the hallway scenario in which it sometimes reaches the goal by avoiding the other agent.

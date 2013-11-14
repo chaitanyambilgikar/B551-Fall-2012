@@ -1,0 +1,173 @@
+count_cat1 = False
+		count_cat2 = False
+		#"""
+		if not examples:
+			#print "Found example set empty"
+			#print featuresett
+			return DTNode(name='cat1') # default
+		else:#if all examples have the same classification then return a tree with that classification
+			a,b = zip(*examples)
+			if (b.count('cat1') == 0):
+				#print "Name was assigned here"
+				return DTNode(name = 'cat2')
+			elif (b.count('cat2') == 0):
+				return DTNode(name = 'cat1')
+			elif not featuresett :
+				counter = {'cat1': 0 , 'cat2': 0}
+				for (i,j) in examples:
+					counter[j] +=1
+				a,b = utils.get_maxitem(counter)
+				print " Found featuresett empty"
+				#print utils.get_maxitem(counter)
+				return DTNode(name = b)
+			else:
+				best_fname = self.choose_feature(featuresett,examples)
+				#print best_fname
+				"Nameassigned her"
+				new_tree = DTNode(name = best_fname)
+				#new_tree.show("->")
+				if b.count('cat1') > b.count('cat2'):
+					m = 'cat1'
+				else:
+					m = 'cat2'
+				#split
+				best_fname_sub_examples = {True:[],False:[]}
+				for (i,j) in examples:
+					if best_fname in i.keys():
+						best_fname_sub_examples[i[best_fname]].append((i,j))
+				for fval in best_fname_sub_examples.keys():
+					sub = featuresett - set(best_fname)
+					new_subtree = self.decision_tree_learning(best_fname_sub_examples[fval],sub)
+					#print new_subtree.name
+					if new_subtree.branch == None:
+						new_tree.branch={}
+						new_tree.branch[fval] = new_subtree
+				return new_tree
+				
+				
+				
+class NaiveBayesClassifier():
+	"""
+	A Naive Bayes classifier.  
+	Naive Bayes classifiers use two probability distributions: 
+       - P(label) gives the probability that an input will receive each 
+         label, given no information about the input's features. 
+       - P(fname=fval|label) gives the probability that a feature 
+         (fname) will be a value (fval), given the label (label). 
+	"""
+	def __init__(self):
+		pass
+		
+	def train(self,examples,featureset):
+		"""
+                Implement this for Problem I
+                
+		featureset - set of features
+			eg) set(['EXIST_to', 'EXIST_its', 'EXIST_of'])
+		examples - list of examples
+			An example is a tuple (features, label) while features is a dictionary of feature name:value pair
+			eg)
+			[
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat1')
+			({'EXIST_its': False, 'EXIST_of': False, 'EXIST_to': False}, 'cat1')
+			({'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': True}, 'cat2')
+			({'EXIST_its': False, 'EXIST_of': True, 'EXIST_to': False}, 'cat1')
+			...
+			]
+
+		This method constructs probability distributions for  P(label), P(fname=fval|label) 
+		"""
+		
+		# Get the list of labels. eg) ['cat1','cat2','cat1','cat1','cat1',...]
+		# Get a list of feature values for each (label,fname) values in the examples
+		# 	which means for 2 labels and 10 features, we will have 2*10 probability distributions
+		labels = []	
+		vals = {}	# note this is a dictionary of the key:value pair (label,fname):list(fval)
+		self.fnames = []
+		for features, label in examples:  
+			labels.append(label)
+			for fname, fval in features.items(): 
+				if fname not in self.fnames:
+					self.fnames.append(fname)
+				if (label,fname) not in vals:
+					vals[(label,fname)] = []
+				vals[(label,fname)].append(fval)
+		
+		# save the label list for possible future use
+		self.labelset = set(labels)
+		#print fnames
+		# get P(label)
+		# construct a ProbDist (probability distribution) with the list 'labels'
+		# Using 'utils.ProbDist()' will make it as simple as one line of code
+
+		# Put your code	here
+		 
+		
+		# get P(fname=fval|label)
+		# construct probability distributions with the dictionary 'vals' whose values are lists of feature values
+		# Again use 'utils.ProbDist()'
+
+		# Put your code here	
+		self.p_labels = utils.ProbDist(labels,False)
+		#print self.p_labels.data
+		#the following two lists contain lists for every word in fnames
+		temp_for_first_fname_cat1 = [[] for i in range(len(self.fnames))]
+		temp_for_first_fname_cat2 = [[] for i in range(len (self.fnames))]
+		counter = 0
+		for k in self.fnames:
+			for i,j in vals.keys():
+				if j == k:
+					if i == 'cat1':
+						temp_for_first_fname_cat1[counter] = temp_for_first_fname_cat1[counter] + vals[(i,j)]
+					else:
+						temp_for_first_fname_cat2[counter] = temp_for_first_fname_cat2[counter] + vals[(i,j)]
+			counter+=1
+		self.prob_given_cat = {}
+		for i in range(len(self.fnames)):
+			self.prob_given_cat[(self.fnames[i],'cat1')] = utils.ProbDist(temp_for_first_fname_cat1[i],False,)
+		for i in range(len(self.fnames)):
+			self.prob_given_cat[(self.fnames[i],'cat2')] = utils.ProbDist(temp_for_first_fname_cat2[i],False,)	
+		"""
+		print "Printing probability of each fname given cat1"
+		for i in self.prob_given_cat.keys():
+			print i,self.prob_given_cat[i].data
+		print "Printing probability of each fname given cat2"
+		for i in self.prob_given_cat2.keys():
+			print i,self.prob_given_cat2[i].data
+		#print temp_for_first_fname_cat1_prob.data
+		#temp_for_first_fname_cat2_prob = utils.ProbDist(temp_for_first_fname_cat2,False)
+		#print temp_for_first_fname_cat2_prob.data
+			
+		"""
+		time.sleep(2)
+
+	def test_one(self,features):
+		"""
+                Implement this for Problem I
+
+		Given a series of features corresponding to a text file,
+		Compute log P(label|features) = log P(label) + log P(features|label) for each label
+		and return the label that maximizes this expression.
+		
+		features is a dictory of feature_name:value pair
+		eg) {'EXIST_its': True, 'EXIST_of': True, 'EXIST_to': True}
+		"""
+		
+		# Replace the following line with your code.
+		# For your convenience, 'utils.get_maxitem(dict)' returns the key whose value is the maximum in the dictionary
+		#for i in features.keys():
+			#print i, features[i]
+		prob_of_cat1 = {'cat1': 0 , 'cat2': 0}
+		for i in features.keys():
+			if features[i] in self.prob_given_cat[i,'cat1'].data.keys():
+				prob_of_cat1['cat1'] += math.exp(math.log(self.p_labels.data['cat1'] + self.p_labels.data['cat2'])  + math.log(self.prob_given_cat[i,'cat1'].data[features[i]]))
+			if features[i] in self.prob_given_cat[i,'cat2'].data.keys():
+				prob_of_cat1['cat2'] += math.exp(math.log(self.p_labels.data['cat2'] + self.p_labels.data['cat1'])  + math.log(self.prob_given_cat[i,'cat2'].data[features[i]]))
+		a , b = utils.get_maxitem(prob_of_cat1)
+		return a
